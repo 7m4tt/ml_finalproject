@@ -147,5 +147,5 @@ elif task == "task5":
     X_df = df[[f"x_{i}" for i in range(1, 21)]]
 y_df = le.inverse_transform(president[1].predict(X_df))
 output_df = pd.DataFrame({"id": df["id"], "value": y_df})
-output_df.to_csv(f"./output/{task}_{president[0]}_{max_acc}.csv", index = False)
+output_df.to_csv(f"./output/{task}_{president[0]}_{max_acc:.4f}.csv", index = False)
 print("finished output.")
