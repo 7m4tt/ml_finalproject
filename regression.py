@@ -3,15 +3,15 @@ import pandas as pd
 import xgboost as xgb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from joblib import parallel_backend
 from sklearn.linear_model import LinearRegression, RidgeCV, LassoCV, ElasticNetCV, LarsCV, BayesianRidge, HuberRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
-from sklearn.model_selection import GridSearchCV
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from joblib import parallel_backend
 
 # trained with 7 linear regressor + 4 non-linear regressor (with Cross-Validition if needed)
 Enable_LinearRegression = True
@@ -27,7 +27,7 @@ Enable_XGBRegressor = True
 Enable_GPRegressor = True
 
 # choose variables
-task = "task3"
+task = "task2"
 train_percentage = 0.8
 n_jobs = -1
 
@@ -132,12 +132,12 @@ print(f"{"=" * 50}\nBest Model: {president[0]}\nMSE = {min_mse}\n{"=" * 50}")
 # use president to pridect final output
 df = pd.read_csv(f"./data/{task}_test.csv")
 if task == "task1":
-    x_df = df[[f"x_{i}" for i in range(1, 11)]]
+    X_df = df[[f"x_{i}" for i in range(1, 11)]]
 elif task == "task2":
-    x_df = df[["x"]]
+    X_df = df[["x"]]
 else:
-    x_df = df[[f"x{i}" for i in range(1, 10)]]
-y_df = president[1].predict(x_df)
+    X_df = df[[f"x{i}" for i in range(1, 10)]]
+y_df = president[1].predict(X_df)
 output_df = pd.DataFrame({"id": df["id"], "value": y_df})
-output_df.to_csv(f"./output/{task}_result.csv", index = False)
+output_df.to_csv(f"./output/{task}_{president[0]}_{min_mse:.6f}.csv", index = False)
 print("finished output.")
